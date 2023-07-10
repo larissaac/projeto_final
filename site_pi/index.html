@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Impact</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+
+        <!-- Firebase-->
+        <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js"></script>
+        <script>
+            var firebaseConfig = {
+            apiKey: "AIzaSyCNFXfbkUyQ60E63wzV39h5EhlTRnNqW-g",
+            authDomain: "projetointegrador-af3e1.firebaseapp.com",
+            databaseURL: "https://projetointegrador-af3e1-default-rtdb.firebaseio.com",
+            projectId: "projetointegrador-af3e1",
+            storageBucket: "projetointegrador-af3e1.appspot.com",
+            messagingSenderId: "180729710941",
+            appId: "1:180729710941:web:a90dc6eebe59c4e99580b4"
+            };
+          
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+
+        var statusRef = firebase.database().ref('status');
+
+        statusRef.on('value', function(snapshot) {
+            var status = snapshot.val();
+            document.getElementById('status').innerHTML = status;
+            if (status === "Queda detectada!") {
+                var options = {
+                    body: "Houve uma queda detectada!",
+                    icon: "https://cdn.jsdelivr.net/fontawesome/4.7.0/css/font-awesome.min.css"
+                };
+                var notification = new Notification("Queda detectada!", options);
+            }
+        });
+
+        </script>  
+    </head>
+    <body id="page-top">
+
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="#page-top">Monitoramento em tempo real</a>
+                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Status</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">Localizar</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Histórico</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container d-flex align-items-center flex-column">
+                <img class="masthead-avatar mb-5" src="assets/img/logoimpact.png" alt="..." style="width: 300px;" />
+                <h1 class="masthead-heading text-uppercase mb-0">Impact</h1>
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <p class="masthead-subheading font-weight-light mb-0">Sistema de monitoramento de idosos</p>
+            </div>
+        </header>
+
+        <!-- Status Section-->
+        <section class="page-section portfolio" id="portfolio">
+            <div class="container">
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Status</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <h1 style="text-align: center; font-size: 45px; color: #2c3e50;"><span id="status"></span></h1>
+            </div>
+        </section>
+
+        <!-- Localizar Section-->
+        <section class="page-section bg-primary text-white mb-0" id="about">
+            <div class="container">
+                <h2 class="page-section-heading text-center text-uppercase text-white">Localizar</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Mapa-->
+                <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6GKhgkcw--k190Y9FPDXmrhZCs01i_3s&callback=initMap"></script>
+                <style>
+                    #map {
+                        height: 500px;
+                        width: 80%;
+                        margin-left: auto;
+                        margin-right: auto;;
+                    }
+                </style>
+                <body onload="initMap()">
+                    <div id="map"></div>
+                    <br>
+                    <div style="text-align: center;" id="coordinates"></div>
+                    <script>
+                    function initMap() {
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 20
+                        });
+                
+                        var marker = new google.maps.Marker({
+                        map: map,
+                        id: 'meu-marcador'
+                        });
+                
+                        firebase.database().ref('gps').on('value', function(snapshot) {
+                        var gps = snapshot.val();
+                        var latLng = new google.maps.LatLng(gps.latitude, gps.longitude);
+                
+                        marker.setPosition(latLng);
+                        map.setCenter(latLng);
+
+                        var latitude = gps.latitude;
+                        var longitude = gps.longitude;
+                        document.getElementById('coordinates').innerHTML = 'Latitude: ' + latitude + ', Longitude: ' + longitude;
+                        });
+                    }
+                    </script>
+                </body>
+        </section>
+
+<!-- Historico Section-->
+<section class="page-section" id="contact">
+    <div class="container">
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Histórico de Quedas</h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Ações</th> <!-- Adicionando uma nova coluna para os botões de ação -->
+                </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            th, td {
+                text-align: left;
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f2f2f2;
+                color: #333;
+            }
+
+            /* Estilos personalizados para o botão Localizar */
+            .btn-localizar {
+                background-color: #4CAF50; /* Cor verde */
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+
+            .btn-localizar:hover {
+                background-color: #45a049; /* Cor verde escura ao passar o mouse */
+            }
+
+            /* Estilos personalizados para o botão Apagar Histórico */
+            .btn-apagar {
+                background-color: #f44336; /* Cor vermelha */
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                cursor: pointer;
+                border-radius: 4px;
+                margin-top: 10px;
+            }
+
+            .btn-apagar:hover {
+                background-color: #d32f2f; /* Cor vermelha escura ao passar o mouse */
+            }
+        </style>
+
+        <script>
+            // Função para adicionar uma nova queda ao histórico
+            function addFallToHistory(date, time, latitude, longitude) {
+                var tableBody = document.getElementById("table-body");
+                var newRow = tableBody.insertRow();
+                var dateCell = newRow.insertCell();
+                var timeCell = newRow.insertCell();
+                var latitudeCell = newRow.insertCell();
+                var longitudeCell = newRow.insertCell();
+                var actionsCell = newRow.insertCell(); // Adicionando uma nova célula para os botões de ação
+                dateCell.innerHTML = date;
+                timeCell.innerHTML = time;
+                latitudeCell.innerHTML = latitude;
+                longitudeCell.innerHTML = longitude;
+                actionsCell.innerHTML = '<button class="btn-localizar" onclick="showLocation(' + latitude + ', ' + longitude + ')">Localizar</button>'; // Adicionando o botão "Localizar" com a classe btn-localizar e a função showLocation()
+            }
+
+            // Função para apagar o histórico
+            function clearHistory() {
+                localStorage.removeItem('fallHistory'); // Remove o histórico do armazenamento local
+                var tableBody = document.getElementById("table-body");
+                tableBody.innerHTML = ''; // Limpa o corpo da tabela
+            }
+
+            // Carrega o histórico salvo, se existir
+            function loadSavedHistory() {
+                var fallHistory = localStorage.getItem('fallHistory');
+                if (fallHistory) {
+                    var historyData = JSON.parse(fallHistory);
+                    historyData.forEach(function (fall) {
+                        addFallToHistory(fall.date, fall.time, fall.latitude, fall.longitude);
+                    });
+                }
+            }
+
+            // Get a reference to the status node
+            var statusRef = firebase.database().ref('status');
+
+            // Listen for changes in the status node
+            statusRef.on('value', function(snapshot) {
+                var status = snapshot.val();
+                if (status === 'Queda detectada!') {
+                    // Get a reference to the gps node
+                    var gpsRef = firebase.database().ref('gps');
+                    gpsRef.once('value', function(snapshot) {
+                        var gps = snapshot.val();
+                        var date = new Date().toLocaleDateString();
+                        var time = new Date().toLocaleTimeString();
+                        var latitude = gps.latitude;
+                        var longitude = gps.longitude;
+
+                        // Adiciona a nova queda ao histórico
+                        addFallToHistory(date, time, latitude, longitude);
+
+                        // Salva o histórico no armazenamento local
+                        var fallHistory = localStorage.getItem('fallHistory');
+                        if (fallHistory) {
+                            var historyData = JSON.parse(fallHistory);
+                            historyData.push({ date: date, time: time, latitude: latitude, longitude: longitude });
+                            localStorage.setItem('fallHistory', JSON.stringify(historyData));
+                        } else {
+                            localStorage.setItem('fallHistory', JSON.stringify([{ date: date, time: time, latitude: latitude, longitude: longitude }]));
+                        }
+                    });
+                }
+            });
+
+            // Carrega o histórico salvo ao carregar a página
+            loadSavedHistory();
+        </script>
+
+        <button class="btn-apagar" onclick="clearHistory()">Apagar Histórico</button> <!-- Botão para apagar o histórico -->
+
+        <script>
+            function showLocation(latitude, longitude) {
+                // Redirecionar para a tela do mapa com a localização da queda
+                window.location.href = 'mapa.html?lat=' + latitude + '&lng=' + longitude;
+            }
+        </script>
+
+    </div>
+</section>
+
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>Projeto desenvolvido por alunos do Instituto Federal Baiano - Campus Guanambi</small></div>
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

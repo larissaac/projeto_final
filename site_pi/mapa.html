@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa</title>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        function initMap() {
+            // Obter a latitude e longitude da URL
+            var urlParams = new URLSearchParams(window.location.search);
+            var latitude = parseFloat(urlParams.get('lat'));
+            var longitude = parseFloat(urlParams.get('lng'));
+
+            // Criar um objeto LatLng com base na latitude e longitude
+            var latLng = { lat: latitude, lng: longitude };
+
+            // Criar o mapa e centralizá-lo na localização fornecida
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: latLng,
+                zoom: 15
+            });
+
+            // Adicionar um marcador na localização fornecida
+            new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: 'Localização da queda'
+            });
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6GKhgkcw--k190Y9FPDXmrhZCs01i_3s&callback=initMap" async defer></script>
+</body>
+</html>
